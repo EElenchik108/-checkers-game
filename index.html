@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Checkers</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+</head>
+<body>
+    <div id="container">
+        <div class="game">
+            <a class="game-up"><span>Начать игру</span></a>
+            <div class="fild-black">
+                <div class="black-time">
+                    <div class="time-img"></div>
+                    <div class="timer-black"><span>00:00:00</span></div>
+                    <div class="checker-black-img"></div>
+                </div>
+                <a class="surrender-black"><span>Сдаться</span></a>
+            </div>
+            <div class="checkers-board">
+                <div class="row-letters">
+                    <span>A</span>
+                    <span>B</span>
+                    <span>C</span>
+                    <span>D</span>
+                    <span>E</span>
+                    <span>F</span>
+                    <span>G</span>
+                    <span>H</span>
+                </div>
+                <div class="cells-numbers">
+                    <div class="column-numbers">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>6</span>
+                        <span>7</span>
+                        <span>8</span>
+                    </div>
+                    <div class="cells">
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+                        <div class="cell-white"></div>
+                        <div class="cell-black"></div>
+
+                        <div class="checker checker-black" id="b1"></div>
+                        <div class="checker checker-black" id="b3"></div>
+                        <div class="checker checker-black" id="b2"></div>
+                        <div class="checker checker-black" id="b4"></div>
+                        <div class="checker checker-black" id="b5"></div>
+                        <div class="checker checker-black" id="b6"></div>
+                        <div class="checker checker-black" id="b7"></div>
+                        <div class="checker checker-black" id="b8"></div>
+                        <div class="checker checker-black" id="b9"></div>
+                        <div class="checker checker-black" id="b10"></div>
+                        <div class="checker checker-black" id="b11"></div>
+                        <div class="checker checker-black" id="b12"></div>
+
+                        <div class="checker checker-white" id="w1"></div>
+                        <div class="checker checker-white" id="w2"></div>
+                        <div class="checker checker-white" id="w3"></div>
+                        <div class="checker checker-white" id="w4"></div>
+                        <div class="checker checker-white" id="w5"></div>
+                        <div class="checker checker-white" id="w6"></div>
+                        <div class="checker checker-white" id="w7"></div>
+                        <div class="checker checker-white" id="w8"></div>
+                        <div class="checker checker-white" id="w9"></div>
+                        <div class="checker checker-white" id="w10"></div>
+                        <div class="checker checker-white" id="w11"></div>
+                        <div class="checker checker-white _active-checker" id="w12"></div> 
+                    </div>
+                    <div class="column-numbers">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>6</span>
+                        <span>7</span>
+                        <span>8</span>
+                    </div>
+                </div>
+
+                <div class="row-letters">
+                    <span>A</span>
+                    <span>B</span>
+                    <span>C</span>
+                    <span>D</span>
+                    <span>E</span>
+                    <span>F</span>
+                    <span>G</span>
+                    <span>H</span>
+                </div>
+            </div>
+            <div class="fild-white">
+                <div class="white-time  _active">
+                    <div class="time-img"></div>
+                    <div class="timer-white"><span>00:00:00</span></div>
+                    <div class="checker-white-img"></div>
+                </div>
+                <a class="surrender-white"><span>Сдаться</span></a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/script.js" type="text/javascript"></script> 
+</body>
+</html>
