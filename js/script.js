@@ -18,13 +18,18 @@ let gameUp = document.querySelector('.game-up'); // Кнопка начала и
 let minBlack = 0;
 let hourBlack = 0;
 let secBlack = 0;
-let intBlack; // Интервал для ченых шашек
 let minWhite = 0;
 let hourWhite = 0;
 let secWhite = 0;
+let intBlack; // Интервал для ченых шашек
 let intWhite; // Интервал для белых шашек
 let whiteСount = 0; // Счет белых
 let blackСount = 0; // Счет черных
+let winner = document.querySelector('.popup  span');
+let blackScore = document.querySelector('.black-score  span');
+let whiteScore = document.querySelector('.white-score  span');
+let substrate = document.querySelector('.substrate');
+let close = document.querySelector('.close');
 
 // ---------------- Убрать класс у всех шашек -----------------------
 
@@ -309,6 +314,7 @@ for(let i=0; i<cellBlack.length; i++){
                             }
                         }
                     }
+                    endGame();
                 }
     
                 if((Math.trunc(topCellBlack) == Math.trunc(topСells)+5 ) && !activeChecker.classList.contains('_king')){
@@ -357,6 +363,9 @@ for(let i=0; i<cellBlack.length; i++){
                     activeB();
                     notActiveW();
                 }
+                endGame();
+                // console.log('Счер белых - ' + whiteСount);
+                // console.log('Счет черных - ' + blackСount);
 
             }
             else{
@@ -454,6 +463,7 @@ for(let i=0; i<cellBlack.length; i++){
                             }
                         }
                     }
+                    endGame();
                 }
                 
                 if(topCellBlack==activeCheckerTop+55 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceBlack(topCellBlack, leftCellBlack)){
@@ -502,8 +512,63 @@ for(let i=0; i<cellBlack.length; i++){
                 if( (Math.trunc(bottomCells) - 60) == Math.trunc(topCellBlack) && !activeChecker.classList.contains('_king')){
                     activeChecker.classList.add('_king');
                 }
+                endGame();
+                // console.log('Счер белых - ' + whiteСount);
+                // console.log('Счет черных - ' + blackСount);
             }
         });
     };
 
+function endGame(){
+    if(whiteСount==12){
+        console.log("Выиграли белые");
+        clearActiveChecker();
+        notActiveB();
+        notActiveW();
+        clearInterval(intBlack);
+        clearInterval(intWhite);
+        winner.innerHTML = " белые";
+        whiteScore.innerHTML = whiteСount;
+        blackScore.innerHTML = blackСount;
+        substrate.classList.remove('hide');
+        substrate.classList.add('show');
+    }
+    else if(blackСount==12){
+        console.log("Выиграли черные");
+        clearActiveChecker();
+        notActiveB();
+        notActiveW();
+        clearInterval(intBlack);
+        clearInterval(intWhite);
+        winner.innerHTML = " черные";
+        whiteScore.innerHTML = whiteСount;
+        blackScore.innerHTML = blackСount;
+        substrate.classList.remove('hide');
+        substrate.classList.add('show');
+    }
+}
 
+close.addEventListener('click', ()=>{
+    substrate.classList.add('hide');
+    substrate.classList.remove('show');
+})
+
+surrenderWhite.addEventListener('click', ()=>{
+    clearInterval(intBlack);
+    clearInterval(intWhite);
+    whiteScore.innerHTML = whiteСount;
+    blackScore.innerHTML = blackСount;
+    winner.innerHTML = " черные";
+    substrate.classList.remove('hide');
+    substrate.classList.add('show');
+});
+
+surrenderBlack.addEventListener('click', ()=>{
+    clearInterval(intBlack);
+    clearInterval(intWhite);
+    whiteScore.innerHTML = whiteСount;
+    blackScore.innerHTML = blackСount;
+    winner.innerHTML = " белые";
+    substrate.classList.remove('hide');
+    substrate.classList.add('show');
+});
