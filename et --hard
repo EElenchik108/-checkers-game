@@ -1,0 +1,23 @@
+[33mcommit 909ba036b24295b08304476e8a3fc421862c0bd2[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Elena Elenskaya <EElenchik@i.ua>
+Date:   Sun Oct 31 17:24:33 2021 +0300
+
+    Added a class for creating checkers, a function for creating and deleting all checkers, an event handler for the button to start the game.
+
+[33mcommit 57491cb7bdc6238615504a6ab467a615cc39e7ea[m
+Author: Elena Elenskaya <EElenchik@i.ua>
+Date:   Thu Oct 21 18:24:58 2021 +0300
+
+    Added a popup at the end of the game, event handlers for the Surrender buttons.
+
+[33mcommit 8a8cd33b1b0c9449d50d5957faf55090e4da414f[m
+Author: Elena Elenskaya <EElenchik@i.ua>
+Date:   Thu Oct 21 14:08:02 2021 +0300
+
+    Implemented switching between players, switching timers.
+
+[33mcommit a12ba78eee53e98fdbb6296b812de08884c03929[m
+Author: Elena Elenskaya <EElenchik@i.ua>
+Date:   Wed Oct 20 12:16:30 2021 +0300
+
+    White and black checkers walk into an empty cage, beat each other. A king is created. The queen moves diagonally and hits. Timers.

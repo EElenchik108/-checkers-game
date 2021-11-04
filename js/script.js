@@ -2,12 +2,14 @@
 
 let checkerBlack; // Все черные шашки
 let checkerWhite; // Все белые шашки
-let cellBlack = document.querySelectorAll('.cell-black'); // Все черные клетки
+let checkers; // Все шашки
+let cellBlack = document.querySelectorAll('.cell-black.cell'); // Все черные клетки
+let cellsBlack = document.querySelectorAll('.cell-black');
 let cells = document.querySelector('.cells'); // Игровое поле
-let topСells = cells.getBoundingClientRect().top; // Расстояние до блока .cells сверху
-let bottomCells = cells.getBoundingClientRect().bottom-5; //Расстояние до блока .cells снизу
-let leftСells = cells.getBoundingClientRect().left; // Расстояние до блока .cells слева
-let checkers = document.querySelectorAll('.checker'); // Все шашки
+let topСells = Math.trunc(cells.getBoundingClientRect().top); // Расстояние до блока .cells сверху
+let bottomCells = Math.trunc(cells.getBoundingClientRect().bottom); //Расстояние до блока .cells снизу
+let leftСells = Math.trunc(cells.getBoundingClientRect().left); // Расстояние до блока .cells слева
+let rightСells = Math.trunc(cells.getBoundingClientRect().right);
 let timerBlack = document.querySelector('.timer-black > span'); // Таймер черных шашек
 let timerWhite = document.querySelector('.timer-white > span'); //Таймер белых шашек
 let activeWhite = document.querySelector('.white-time'); // Поле с таймером для белых шашек
@@ -31,6 +33,7 @@ let whiteScore = document.querySelector('.white-score  span');
 let substrate = document.querySelector('.substrate');
 let close = document.querySelector('.close');
 
+
 //--------------------------- Создание всех шашек -----------------------------------
 
 class Checker {
@@ -46,7 +49,7 @@ class Checker {
     this.newDiv.className = `checker ${this.classChecker}`;
     cells.append(this.newDiv); 
   }
-}
+};
 function createCheckers(){
     for(let i=1; i<13; i++){
         window["b"+i] = new Checker("checker-black", `b${i}`);
@@ -82,7 +85,7 @@ function clearActiveChecker(){
 
 function presence(top, left){
     for(let i=0; i<checkers.length; i++){
-        if( checkers[i].getBoundingClientRect().top == (top + 5) && checkers[i].getBoundingClientRect().left == (left + 5) ) {
+        if( Math.trunc(checkers[i].getBoundingClientRect().top) == Math.trunc(top + 5) && Math.trunc(checkers[i].getBoundingClientRect().left) == Math.trunc(left + 5) ) {
             return checkers[i].id;
         }
     }
@@ -107,6 +110,7 @@ function presenceBlack(top, left){
         }
     }
 }
+
 
 // ------------------- Таймер для белых шашек ---------------------------------
 
@@ -226,8 +230,7 @@ function  activeB() {  // ------- Активный игрок черными ш�
     activeWhite.classList.remove('_active');
     activeBlack.classList.add('_active');
 }
-// activeW();
-// activeB();
+
 function notActiveW() { // --------- Отключение активности игрока белых шашек ----------
     for(let i=0; i<checkerBlack.length; i++){
         checkerWhite[i].onclick = null;
@@ -258,6 +261,7 @@ gameUp.addEventListener('click', ()=>{
     createCheckers();
     checkerWhite = document.querySelectorAll('.checker-white');
     checkerBlack = document.querySelectorAll('.checker-black');
+    checkers = document.querySelectorAll('.checker');
     activeW();
 });
 
@@ -266,309 +270,386 @@ gameUp.addEventListener('click', ()=>{
 substrate.classList.add('hide');
 substrate.classList.remove('show');
 
-for(let i=0; i<cellBlack.length; i++){
-        cellBlack[i].addEventListener('click', ()=>{
-            let topCellBlack = Math.trunc(cellBlack[i].getBoundingClientRect().top);
-            let leftCellBlack = Math.trunc(cellBlack[i].getBoundingClientRect().left);
-            let activeChecker = document.querySelector('._active-checker');
-            let activeCheckerTop = (activeChecker) ? Math.trunc(activeChecker.getBoundingClientRect().top) : null;
-            let activeCheckerLeft = (activeChecker) ? Math.trunc(activeChecker.getBoundingClientRect().left) : null;
-
-            if(activeChecker && activeChecker.classList.contains('checker-white')){// ----- Для белых шашек ---------------------------
-
-                //----------------- Для белой дамки ---------------------------
-
-                if(activeChecker.classList.contains('_king')){
-                    let y = Math.round((activeCheckerTop - (topCellBlack-5))/60);
-                    let x = Math.round((leftCellBlack - (activeCheckerLeft-5))/60);
-                    let topY = Math.trunc(activeCheckerTop)-5;
-                    let leftX = Math.trunc(activeCheckerLeft)-5;
-                    let countW = 0;
-                    let countB = 0;
-                    let count;
-                    if(x>0 && y>0){
-                        for(let i=1; i<x; i++){
-                            topY-=60;
-                            leftX+=60;
-                            if(presenceWhite(topY, leftX)) {
-                                countW+=1;
-                            }
-                            if(presenceBlack(topY, leftX)){
-                                countB+=1;
-                            }
-                        }
-                    }
-                    if(x>0 && y<0){
-                        for(let i=1; i<x; i++){
-                            topY+=60;
-                            leftX+=60;
-                            if(presenceWhite(topY, leftX)) {
-                                countW+=1;
-                            }
-                            if(presenceBlack(topY, leftX)){
-                                countB+=1;
-                            }
-                        }
-                    }
-                    if(x<0 && y<0){
-                        for(let i=1; i<Math.abs(x); i++){
-                            topY+=60;
-                            leftX-=60;
-                            if(presenceWhite(topY, leftX)){
-                                countW+=1;
-                            }
-                            if(presenceBlack(topY, leftX)){
-                                countB+=1;
-                            }
-                        }
-                    }
-                    if(x<0 && y>0){
-                        for(let i=1; i<Math.abs(x); i++){
-                            topY-=60;
-                            leftX-=60;
-                            if(presenceWhite(topY, leftX)){
-                                countW+=1;
-                            }
-                            if(presenceBlack(topY, leftX)){
-                                countB+=1;
-                            }
-                        }
-                    }
-                    count = countW+countB;
-                    if( Math.abs(y) == Math.abs(x) && !presenceWhite(topCellBlack, leftCellBlack) && !presenceBlack(topCellBlack, leftCellBlack) && count<2 && countW==0){
-                        activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                        activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                        clearActiveChecker();
-                        activeB();
-                        notActiveW();
-                        if(countB==1) {
-                            topY = Math.trunc(activeCheckerTop)-5;
-                            leftX = Math.trunc(activeCheckerLeft)-5;
-                            for(let i=1; i<Math.abs(x); i++){
-                                if(x<0 && y>0){
-                                    topY-=60;
-                                    leftX-=60;
-                                };
-                                if(x<0 && y<0){
-                                    topY+=60;
-                                    leftX-=60;
-                                };
-                                if(x>0 && y<0){
-                                    topY+=60;
-                                    leftX+=60;
-                                };
-                                if(x>0 && y>0){
-                                    topY-=60;
-                                    leftX+=60;
-                                };
-                                if(presenceBlack(topY, leftX)){
-                                    document.getElementById(presenceBlack(topY, leftX)).remove();
-                                    whiteСount+=1;
-                                }
-                                endGame();
-                            }
-                        }
-                        clearInterval(intWhite);
-                    }
-                }
-
-                if((Math.trunc(topCellBlack) == Math.trunc(topСells)+5 ) && !activeChecker.classList.contains('_king')){
-                    activeChecker.classList.add('_king');
-                }
-                if(topCellBlack==activeCheckerTop-65 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceBlack(topCellBlack, leftCellBlack)){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    clearActiveChecker();
-                    activeB();
-                    notActiveW();
-                }
-                if( topCellBlack==activeCheckerTop-125 && leftCellBlack==activeCheckerLeft+115 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceBlack(topCellBlack, leftCellBlack) && presenceBlack(topCellBlack+60, leftCellBlack-60) ){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    document.getElementById(presenceBlack(topCellBlack+60, leftCellBlack-60)).remove();
-                    whiteСount+=1;
-                    clearActiveChecker();
-                    activeB();
-                    notActiveW();
-                }
-                if( topCellBlack==activeCheckerTop-125 && leftCellBlack==activeCheckerLeft-125 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceBlack(topCellBlack, leftCellBlack) && presenceBlack(topCellBlack+60, leftCellBlack+60) ){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    document.getElementById(presenceBlack(topCellBlack+60, leftCellBlack+60)).remove();
-                    whiteСount+=1;
-                    clearActiveChecker();
-                    activeB();
-                    notActiveW();
-                }
-                if( topCellBlack==activeCheckerTop+115 && leftCellBlack==activeCheckerLeft+115 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceBlack(topCellBlack, leftCellBlack) && presenceBlack(topCellBlack-60, leftCellBlack-60) ){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    document.getElementById(presenceBlack(topCellBlack-60, leftCellBlack-60)).remove();
-                    whiteСount+=1;
-                    clearActiveChecker();
-                    activeB();
-                    notActiveW();
-                }
-                if( topCellBlack==activeCheckerTop+115 && leftCellBlack==activeCheckerLeft-125 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceBlack(topCellBlack, leftCellBlack) && presenceBlack(topCellBlack-60, leftCellBlack+60) ){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    document.getElementById(presenceBlack(topCellBlack-60, leftCellBlack+60)).remove();
-                    whiteСount+=1;
-                    clearActiveChecker();
-                    activeB();
-                    notActiveW();
-                }
-                clearInterval(intWhite);
-                endGame();
-            }
-            else{ // ------------------------ Для черных -----------------------------------
+function clickCell(prop) {
     
-                // ------------------------ Для черной дамки -----------------------------
-                if(activeChecker && activeChecker.classList.contains('_king')){
-                    let y = Math.round((activeCheckerTop - (topCellBlack-5))/60);
-                    let x = Math.round((leftCellBlack - (activeCheckerLeft-5))/60);
-                    let topY = Math.trunc(activeCheckerTop)-5;
-                    let leftX = Math.trunc(activeCheckerLeft)-5;
-                    let countW = 0;
-                    let countB = 0;
-                    let count;
-                    if(x>0 && y>0){
-                        for(let i=1; i<x; i++){
-                            topY-=60;
-                            leftX+=60;
-                            if(presenceWhite(topY, leftX)) {
-                                countW+=1;
-                            }
-                            if(presenceBlack(topY, leftX)){
-                                countB+=1;
-                            }
+    for(let i=0; i<cellBlack.length; i++){
+            cellBlack[i].addEventListener('click', ()=>{
+                if(cellBlack[i].classList.contains('cell')){
+                    let topCellBlack = Math.trunc(cellBlack[i].getBoundingClientRect().top);
+                    console.log(topCellBlack);
+                    let leftCellBlack = Math.trunc(cellBlack[i].getBoundingClientRect().left);
+                    console.log(leftCellBlack);
+                    let activeChecker = document.querySelector('._active-checker');
+                    let activeCheckerTop = (activeChecker) ? Math.trunc(activeChecker.getBoundingClientRect().top) : null;
+                    let activeCheckerLeft = (activeChecker) ? Math.trunc(activeChecker.getBoundingClientRect().left) : null;
+                    if(prop) {
+                        console.log(prop);
+                        addClass();
+                    };
+
+                    // ------------------------------- Возможность повторного боя для обычной шашки ----------------------
+            
+                    function repeatMove(func, who1){
+                        if( topCellBlack>=topСells+125 && topCellBlack<=bottomCells-65 && leftCellBlack>=leftСells+5 && leftCellBlack<=rightСells-185 && func(topCellBlack-60, leftCellBlack+60) && !presence(topCellBlack-120, leftCellBlack+120)){
+                            console.log('Сверху справа');
+                            remoceClass(topCellBlack-120, leftCellBlack+120);
+                            notActiveW();
+                            notActiveB();
+                            clickCell('ok');
                         }
-                    }
-                    if(x>0 && y<0){
-                        for(let i=1; i<x; i++){
-                            topY+=60;
-                            leftX+=60;
-                            if(presenceWhite(topY, leftX)) {
-                                countW+=1;
-                            }
-                            if(presenceBlack(topY, leftX)){
-                                countB+=1;
-                            }
+                        else if( topCellBlack>=topСells+5 && topCellBlack<=bottomCells-185 && leftCellBlack>=leftСells+5 && leftCellBlack<=rightСells-185 && func(topCellBlack+60, leftCellBlack+60) && !presence(topCellBlack+120, leftCellBlack+120)){
+                            console.log('Снизу справа');
+                            remoceClass(topCellBlack+120, leftCellBlack+120);
+                            notActiveW();
+                            notActiveB();
+                            clickCell('ok');
                         }
-                    }
-                    if(x<0 && y<0){
-                        for(let i=1; i<Math.abs(x); i++){
-                            topY+=60;
-                            leftX-=60;
-                            if(presenceWhite(topY, leftX)){
-                                countW+=1;
-                            }
-                            if(presenceBlack(topY, leftX)){
-                                countB+=1;
-                            }
+                        else if( topCellBlack>=topСells+125 && topCellBlack<=bottomCells-5 && leftCellBlack>=leftСells+125 && leftCellBlack<=rightСells-65 && func(topCellBlack-60, leftCellBlack-60) && !presence(topCellBlack-120, leftCellBlack-120)){
+                            console.log('Сверху слева');
+                            remoceClass(topCellBlack-120, leftCellBlack-120);
+                            notActiveW();
+                            notActiveB();
+                            clickCell('ok');
                         }
-                    }
-                    if(x<0 && y>0){
-                        for(let i=1; i<Math.abs(x); i++){
-                            topY-=60;
-                            leftX-=60;
-                            if(presenceWhite(topY, leftX)){
-                                countW+=1;
-                            }
-                            if(presenceBlack(topY, leftX)){
-                                countB+=1;
-                            }
+                        else if( topCellBlack>=topСells+5 && topCellBlack<=bottomCells-185 && leftCellBlack>=leftСells+125 && leftCellBlack<=rightСells-65 && func(topCellBlack+60, leftCellBlack-60) && !presence(topCellBlack+120, leftCellBlack-120)){
+                            console.log('Снизу слева');
+                            remoceClass(topCellBlack+120, leftCellBlack-120);
+                            notActiveW();
+                            notActiveB();
+                            clickCell('ok');
                         }
+                        else {
+                            clearActiveChecker();
+                            (func==presenceBlack) ? activeB() : activeW();
+                            (func==presenceBlack) ? notActiveW() : notActiveB();
+                        };
                     }
-                    count = countW+countB;
-                    if( Math.abs(y) == Math.abs(x) && !presenceWhite(topCellBlack, leftCellBlack) && !presenceBlack(topCellBlack, leftCellBlack) && count<2 && countB==0){
-                        activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                        activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                        clearActiveChecker();
-                        activeW();
-                        notActiveB();
-                        if(countW==1) {
-                            topY = Math.trunc(activeCheckerTop)-5;
-                            leftX = Math.trunc(activeCheckerLeft)-5;
-                            for(let i=1; i<Math.abs(x); i++){
-                                if(x<0 && y>0){
-                                    topY-=60;
-                                    leftX-=60;
-                                };
-                                if(x<0 && y<0){
-                                    topY+=60;
-                                    leftX-=60;
-                                };
-                                if(x>0 && y<0){
-                                    topY+=60;
-                                    leftX+=60;
-                                };
-                                if(x>0 && y>0){
+                    
+                    if(activeChecker && activeChecker.classList.contains('checker-white')){// ----- Для белых шашек ---------------------------
+                        
+                        //----------------- Для белой дамки ---------------------------
+    
+                        if(activeChecker.classList.contains('_king')){
+                            let y = Math.round((activeCheckerTop - (topCellBlack-5))/60);
+                            let x = Math.round((leftCellBlack - (activeCheckerLeft-5))/60);
+                            let topY = Math.trunc(activeCheckerTop)-5;
+                            let leftX = Math.trunc(activeCheckerLeft)-5;
+                            let countW = 0;
+                            let countB = 0;
+                            let count;
+                            if(x>0 && y>0){
+                                for(let i=1; i<x; i++){
                                     topY-=60;
                                     leftX+=60;
-                                };
-                                if(presenceWhite(topY, leftX)){
-                                    document.getElementById(presenceWhite(topY, leftX)).remove();
-                                    blackСount+=1;
+                                    if(presenceWhite(topY, leftX)) {
+                                        countW+=1;
+                                    }
+                                    if(presenceBlack(topY, leftX)){
+                                        countB+=1;
+                                    }
                                 }
-                                endGame();
                             }
+                            if(x>0 && y<0){
+                                for(let i=1; i<x; i++){
+                                    topY+=60;
+                                    leftX+=60;
+                                    if(presenceWhite(topY, leftX)) {
+                                        countW+=1;
+                                    }
+                                    if(presenceBlack(topY, leftX)){
+                                        countB+=1;
+                                    }
+                                }
+                            }
+                            if(x<0 && y<0){
+                                for(let i=1; i<Math.abs(x); i++){
+                                    topY+=60;
+                                    leftX-=60;
+                                    if(presenceWhite(topY, leftX)){
+                                        countW+=1;
+                                    }
+                                    if(presenceBlack(topY, leftX)){
+                                        countB+=1;
+                                    }
+                                }
+                            }
+                            if(x<0 && y>0){
+                                for(let i=1; i<Math.abs(x); i++){
+                                    topY-=60;
+                                    leftX-=60;
+                                    if(presenceWhite(topY, leftX)){
+                                        countW+=1;
+                                    }
+                                    if(presenceBlack(topY, leftX)){
+                                        countB+=1;
+                                    }
+                                }
+                            }
+                            count = countW+countB;
+                            if( Math.abs(y) == Math.abs(x) && !presence(topCellBlack, leftCellBlack) && count<2 && countW==0){
+                                activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                                activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                                clearActiveChecker();
+                                activeB();
+                                notActiveW();
+                                if(countB==1) {
+                                    topY = Math.trunc(activeCheckerTop)-5;
+                                    leftX = Math.trunc(activeCheckerLeft)-5;
+                                    for(let i=1; i<Math.abs(x); i++){
+                                        if(x<0 && y>0){
+                                            topY-=60;
+                                            leftX-=60;
+                                        };
+                                        if(x<0 && y<0){
+                                            topY+=60;
+                                            leftX-=60;
+                                        };
+                                        if(x>0 && y<0){
+                                            topY+=60;
+                                            leftX+=60;
+                                        };
+                                        if(x>0 && y>0){
+                                            topY-=60;
+                                            leftX+=60;
+                                        };
+                                        if(presenceBlack(topY, leftX)){
+                                            document.getElementById(presenceBlack(topY, leftX)).remove();
+                                            whiteСount+=1;
+                                        }
+                                        endGame();
+                                    }
+                                }
+                                clearInterval(intWhite);
+                            }
+                        }
+    
+                        if((Math.trunc(topCellBlack) == (topСells+5) ) && !activeChecker.classList.contains('_king')){
+                            activeChecker.classList.add('_king');
+                        }
+                        if(topCellBlack==activeCheckerTop-65 && !presence(topCellBlack, leftCellBlack)){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            clearActiveChecker();
+                            activeB();
+                            notActiveW();
+                        }
+                        if( topCellBlack==activeCheckerTop-125 && leftCellBlack==activeCheckerLeft+115 && !presence(topCellBlack, leftCellBlack) && presenceBlack(topCellBlack+60, leftCellBlack-60) ){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            document.getElementById(presenceBlack(topCellBlack+60, leftCellBlack-60)).remove();
+                            whiteСount+=1;
+                            // clearActiveChecker();
+                            // activeB();
+                            // notActiveW();
+                            repeatMove(presenceBlack, 'white');
+                        }
+                        if( topCellBlack==activeCheckerTop-125 && leftCellBlack==activeCheckerLeft-125 && !presence(topCellBlack, leftCellBlack) && presenceBlack(topCellBlack+60, leftCellBlack+60) ){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            document.getElementById(presenceBlack(topCellBlack+60, leftCellBlack+60)).remove();
+                            whiteСount+=1;
+                            // clearActiveChecker();
+                            // activeB();
+                            // notActiveW();
+                            repeatMove(presenceBlack, 'white');
+                        }
+                        if( topCellBlack==activeCheckerTop+115 && leftCellBlack==activeCheckerLeft+115 && !presence(topCellBlack, leftCellBlack) && presenceBlack(topCellBlack-60, leftCellBlack-60) ){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            document.getElementById(presenceBlack(topCellBlack-60, leftCellBlack-60)).remove();
+                            whiteСount+=1;
+                            // clearActiveChecker();
+                            // activeB();
+                            // notActiveW();
+                            repeatMove(presenceBlack, 'white');
+                        }
+                        if( topCellBlack==activeCheckerTop+115 && leftCellBlack==activeCheckerLeft-125 && !presence(topCellBlack, leftCellBlack) && presenceBlack(topCellBlack-60, leftCellBlack+60) ){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            document.getElementById(presenceBlack(topCellBlack-60, leftCellBlack+60)).remove();
+                            whiteСount+=1;
+                            // clearActiveChecker();
+                            // activeB();
+                            // notActiveW();
+                            repeatMove(presenceBlack, 'white');
+                        }
+                        // clearInterval(intWhite);
+                        endGame();
+                    }
+                    else{ // ------------------------ Для черных -----------------------------------
+            
+                        // ------------------------ Для черной дамки -----------------------------
+                        if(activeChecker && activeChecker.classList.contains('_king')){
+                            let y = Math.round((activeCheckerTop - (topCellBlack-5))/60);
+                            let x = Math.round((leftCellBlack - (activeCheckerLeft-5))/60);
+                            let topY = Math.trunc(activeCheckerTop)-5;
+                            let leftX = Math.trunc(activeCheckerLeft)-5;
+                            let countW = 0;
+                            let countB = 0;
+                            let count;
+                            if(x>0 && y>0){
+                                for(let i=1; i<x; i++){
+                                    topY-=60;
+                                    leftX+=60;
+                                    if(presenceWhite(topY, leftX)) {
+                                        countW+=1;
+                                    }
+                                    if(presenceBlack(topY, leftX)){
+                                        countB+=1;
+                                    }
+                                }
+                            }
+                            if(x>0 && y<0){
+                                for(let i=1; i<x; i++){
+                                    topY+=60;
+                                    leftX+=60;
+                                    if(presenceWhite(topY, leftX)) {
+                                        countW+=1;
+                                    }
+                                    if(presenceBlack(topY, leftX)){
+                                        countB+=1;
+                                    }
+                                }
+                            }
+                            if(x<0 && y<0){
+                                for(let i=1; i<Math.abs(x); i++){
+                                    topY+=60;
+                                    leftX-=60;
+                                    if(presenceWhite(topY, leftX)){
+                                        countW+=1;
+                                    }
+                                    if(presenceBlack(topY, leftX)){
+                                        countB+=1;
+                                    }
+                                }
+                            }
+                            if(x<0 && y>0){
+                                for(let i=1; i<Math.abs(x); i++){
+                                    topY-=60;
+                                    leftX-=60;
+                                    if(presenceWhite(topY, leftX)){
+                                        countW+=1;
+                                    }
+                                    if(presenceBlack(topY, leftX)){
+                                        countB+=1;
+                                    }
+                                }
+                            }
+                            count = countW+countB;
+                            if( Math.abs(y) == Math.abs(x) && !presence(topCellBlack, leftCellBlack) && count<2 && countB==0){
+                                activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                                activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                                clearActiveChecker();
+                                activeW();
+                                notActiveB();
+                                if(countW==1) {
+                                    topY = Math.trunc(activeCheckerTop)-5;
+                                    leftX = Math.trunc(activeCheckerLeft)-5;
+                                    for(let i=1; i<Math.abs(x); i++){
+                                        if(x<0 && y>0){
+                                            topY-=60;
+                                            leftX-=60;
+                                        };
+                                        if(x<0 && y<0){
+                                            topY+=60;
+                                            leftX-=60;
+                                        };
+                                        if(x>0 && y<0){
+                                            topY+=60;
+                                            leftX+=60;
+                                        };
+                                        if(x>0 && y>0){
+                                            topY-=60;
+                                            leftX+=60;
+                                        };
+                                        if(presenceWhite(topY, leftX)){
+                                            document.getElementById(presenceWhite(topY, leftX)).remove();
+                                            blackСount+=1;
+                                        }
+                                        endGame();
+                                    }
+                                }
+                                clearInterval(intBlack);
+                            }
+                        }
+                        
+                        if(topCellBlack==activeCheckerTop+55 && !presence(topCellBlack, leftCellBlack)){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            clearActiveChecker();
+                            activeW();
+                            notActiveB();
+                        }
+                        if( topCellBlack==activeCheckerTop-125 && leftCellBlack==activeCheckerLeft+115 && !presence(topCellBlack, leftCellBlack) && presenceWhite(topCellBlack+60, leftCellBlack-60) ){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            document.getElementById(presenceWhite(topCellBlack+60, leftCellBlack-60)).remove();
+                            blackСount+=1;
+                            // clearActiveChecker();
+                            // activeW();
+                            // notActiveB();
+                            repeatMove(presenceWhite, 'black');
+                        }
+                        if( topCellBlack==activeCheckerTop-125 && leftCellBlack==activeCheckerLeft-125 && !presence(topCellBlack, leftCellBlack) && presenceWhite(topCellBlack+60, leftCellBlack+60) ){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            document.getElementById(presenceWhite(topCellBlack+60, leftCellBlack+60)).remove();
+                            blackСount+=1;
+                            // clearActiveChecker();
+                            // activeW();
+                            // notActiveB();
+                            repeatMove(presenceWhite, 'black');
+                        }
+                        if( topCellBlack==activeCheckerTop+115 && leftCellBlack==activeCheckerLeft+115 && !presence(topCellBlack, leftCellBlack) && presenceWhite(topCellBlack-60, leftCellBlack-60) ){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            document.getElementById(presenceWhite(topCellBlack-60, leftCellBlack-60)).remove();
+                            blackСount+=1;
+                            // clearActiveChecker();
+                            // activeW();
+                            // notActiveB();
+                            repeatMove(presenceWhite, 'black');
+                        }
+                        if( topCellBlack==activeCheckerTop+115 && leftCellBlack==activeCheckerLeft-125 && !presence(topCellBlack, leftCellBlack) && presenceWhite(topCellBlack-60, leftCellBlack+60) ){
+                            activeChecker.style.top = (topCellBlack - topСells) + 'px';
+                            activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
+                            document.getElementById(presenceWhite(topCellBlack-60, leftCellBlack+60)).remove();
+                            blackСount+=1;
+                            // clearActiveChecker();
+                            // activeW();
+                            // notActiveB();
+                            repeatMove(presenceWhite, 'black');
+                        }
+                        if( (bottomCells - 65) == Math.trunc(topCellBlack) && activeChecker && !activeChecker.classList.contains('_king')){
+                            activeChecker.classList.add('_king');
                         }
                         clearInterval(intBlack);
+                        endGame();
                     }
+
                 }
-                
-                if(topCellBlack==activeCheckerTop+55 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceBlack(topCellBlack, leftCellBlack)){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    clearActiveChecker();
-                    activeW();
-                    notActiveB();
-                }
-                if( topCellBlack==activeCheckerTop-125 && leftCellBlack==activeCheckerLeft+115 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceWhite(topCellBlack, leftCellBlack) && presenceWhite(topCellBlack+60, leftCellBlack-60) ){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    document.getElementById(presenceWhite(topCellBlack+60, leftCellBlack-60)).remove();
-                    blackСount+=1;
-                    clearActiveChecker();
-                    activeW();
-                    notActiveB();
-                }
-                if( topCellBlack==activeCheckerTop-125 && leftCellBlack==activeCheckerLeft-125 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceWhite(topCellBlack, leftCellBlack) && presenceWhite(topCellBlack+60, leftCellBlack+60) ){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    document.getElementById(presenceWhite(topCellBlack+60, leftCellBlack+60)).remove();
-                    blackСount+=1;
-                    clearActiveChecker();
-                    activeW();
-                    notActiveB();
-                }
-                if( topCellBlack==activeCheckerTop+115 && leftCellBlack==activeCheckerLeft+115 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceWhite(topCellBlack, leftCellBlack) && presenceWhite(topCellBlack-60, leftCellBlack-60) ){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    document.getElementById(presenceWhite(topCellBlack-60, leftCellBlack-60)).remove();
-                    blackСount+=1;
-                    clearActiveChecker();
-                    activeW();
-                    notActiveB();
-                }
-                if( topCellBlack==activeCheckerTop+115 && leftCellBlack==activeCheckerLeft-125 && !presenceWhite(topCellBlack, leftCellBlack) && !presenceWhite(topCellBlack, leftCellBlack) && presenceWhite(topCellBlack-60, leftCellBlack+60) ){
-                    activeChecker.style.top = (topCellBlack - topСells) + 'px';
-                    activeChecker.style.left = (leftCellBlack - leftСells) + 'px';
-                    document.getElementById(presenceWhite(topCellBlack-60, leftCellBlack+60)).remove();
-                    blackСount+=1;
-                    clearActiveChecker();
-                    activeW();
-                    notActiveB();
-                }
-                if( (Math.trunc(bottomCells) - 60) == Math.trunc(topCellBlack) && !activeChecker.classList.contains('_king')){
-                    activeChecker.classList.add('_king');
-                }
-                clearInterval(intBlack);
-                endGame();
-            }
-        });
+            });
+            
+    };
 };
+clickCell();
+
+// ------------------------------- Дополнительные функции для повторного боя -------------------------------
+function addClass(){
+    for(let i=0; i<cellsBlack.length; i++){
+        cellsBlack[i].className = 'cell-black cell';
+    };
+};
+function remoceClass(top, left){
+    for(let i=0; i<cellBlack.length; i++){
+        cellBlack[i].classList.remove('cell');
+    };
+    for(let i=0; i<cellBlack.length; i++){
+        if(top==Math.trunc(cellBlack[i].getBoundingClientRect().top) && left==Math.trunc(cellBlack[i].getBoundingClientRect().left)){
+            cellsBlack[i].className = 'cell-black cell';
+        };
+    };
+}
 
 // ------------------------------ Конец игры --------------------------------------
 
@@ -584,6 +665,8 @@ function endGame(){
         blackScore.innerHTML = blackСount;
         substrate.classList.remove('hide');
         substrate.classList.add('show');
+        clearInterval(intBlack);
+        clearInterval(intWhite);
     }
     else if(blackСount==12){
         clearInterval(intBlack);
@@ -596,6 +679,8 @@ function endGame(){
         blackScore.innerHTML = blackСount;
         substrate.classList.remove('hide');
         substrate.classList.add('show');
+        clearInterval(intBlack);
+        clearInterval(intWhite);
     }
 }
 
